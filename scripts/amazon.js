@@ -1,58 +1,56 @@
-const products = [
-    {
-        img : "images/products/athletic-cotton-socks-6-pairs.jpg",
-        title :"Black and Gray Athletic Cotton Socks - 6 Pairs",
-        rating : {
-            stars : 45,
-            count : 87
-        },
-        priceCent : 1090
-    },
-    {
-        img : "images/products/intermediate-composite-basketball.jpg",
-        title :"Intermediate Size Basketball",
-        rating : {
-            stars : 40,
-            count : 127
-        },
-        priceCent : 2095
-    },
-    {
-        img : "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
-        title :"Adults Plain Cotton T-Shirt - 2 Pack",
-        rating : {
-            stars : 45,
-            count : 56
-        },
-        priceCent : 799
-    }
-]
+// const products = [
+//     {
+//         img : "images/products/athletic-cotton-socks-6-pairs.jpg",
+//         title :"Black and Gray Athletic Cotton Socks - 6 Pairs",
+//         rating : {
+//             stars : 45,
+//             count : 87
+//         },
+//         priceCent : 1090
+//     },
+//     {
+//         img : "images/products/intermediate-composite-basketball.jpg",
+//         title :"Intermediate Size Basketball",
+//         rating : {
+//             stars : 40,
+//             count : 127
+//         },
+//         priceCent : 2095
+//     },
+//     {
+//         img : "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
+//         title :"Adults Plain Cotton T-Shirt - 2 Pack",
+//         rating : {
+//             stars : 45,
+//             count : 56
+//         },
+//         priceCent : 799
+//     }
+// ]
 
 let html = "";
-
-//loop in the array element : product
 products.forEach(function(element) {
     html += `
     <div class="product-container">
           <div class="product-image-container">
             <img class="product-image"
-              src=${element.img}>
+              src=${element.image}>
           </div>
 
           <div class="product-name limit-text-to-2-lines">
-            ${element.title}
+            ${element.name}
           </div>
 
           <div class="product-rating-container">
             <img class="product-rating-stars"
-              src="images/ratings/rating-${element.rating.stars}.png">
+              src="images/ratings/rating-${element.rating.stars*10}.png">
             <div class="product-rating-count link-primary">
               ${element.rating.count}
             </div>
           </div>
 
           <div class="product-price">
-            $${(element.priceCent / 100).toFixed(2)}
+            $${(element.priceCents / 100).toFixed(2)}
           </div>
 
           <div class="product-quantity-container">
@@ -82,6 +80,7 @@ products.forEach(function(element) {
           </button>
         </div>
 `;
-    
     document.querySelector(".products-grid").innerHTML = html;
 });
+
+console.log("amazon.js");
