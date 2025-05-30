@@ -1,33 +1,5 @@
-// const products = [
-//     {
-//         img : "images/products/athletic-cotton-socks-6-pairs.jpg",
-//         title :"Black and Gray Athletic Cotton Socks - 6 Pairs",
-//         rating : {
-//             stars : 45,
-//             count : 87
-//         },
-//         priceCent : 1090
-//     },
-//     {
-//         img : "images/products/intermediate-composite-basketball.jpg",
-//         title :"Intermediate Size Basketball",
-//         rating : {
-//             stars : 40,
-//             count : 127
-//         },
-//         priceCent : 2095
-//     },
-//     {
-//         img : "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
-//         title :"Adults Plain Cotton T-Shirt - 2 Pack",
-//         rating : {
-//             stars : 45,
-//             count : 56
-//         },
-//         priceCent : 799
-//     }
-// ]
-
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
+//localStorage.clear();
 let html = "";
 products.forEach(function(element) {
     html += `
@@ -74,8 +46,9 @@ products.forEach(function(element) {
             <img src="images/icons/checkmark.png">
             Added
           </div>
-
-          <button class="add-to-cart-button button-primary">
+          <p class="cart-added"></p>
+          <button class="add-to-cart-button button-primary"
+          onclick="addToCart('${element.id}',this)">
             Add to Cart
           </button>
         </div>
@@ -83,4 +56,53 @@ products.forEach(function(element) {
     document.querySelector(".products-grid").innerHTML = html;
 });
 
-console.log("amazon.js");
+let currentCartId = parseInt(localStorage.getItem("currentCartId")) || 0;
+let totalQuantity = parseInt(localStorage.getItem("totalQuantity")) || 0;
+//Update NavBar Cart
+document.querySelector(".cart-quantity").innerHTML = totalQuantity;
+function addToCart(id, button){
+  /**
+   * parentElement : <div class="product-container">
+   * Get Value from <select>
+   * parseInt : To parse from string to int
+   */
+  const quantity = parseInt(button.parentElement.querySelector('select').value);
+  let found = false;
+  products.forEach(function(element){
+    if(element.id === id){
+      cart.forEach(function(item){
+        console.log("item.id ="+item.id+"currentCartId ="+currentCartId);
+        if(item.id === currentCartId){
+          console.log("Doublant");
+          item.quantity++;
+          found = true;
+        }
+      });
+      if(found === false){
+      //Create New Cart Object and Load Product in it
+      cart.push({
+        id : ++currentCartId,
+        image : element.image,
+        name : element.name,
+        priceCents : element.priceCents,
+        quantity : quantity
+        });
+      //Save to localStorage
+      localStorage.setItem("currentCartId",currentCartId);
+      //Save to localStorage
+      localStorage.setItem("cart", JSON.stringify(cart));
+      //Show Added To Cart Message
+      button.parentElement.querySelector(".cart-added").innerHTML = 'Added To Cart!';
+      //Hide Message after 3 seconds
+      setTimeout(function(){
+        button.parentElement.querySelector(".cart-added").innerHTML = '';
+      },3000);
+      totalQuantity+= quantity;
+      //Save to localStorage
+      localStorage.setItem("totalQuantity",totalQuantity);
+      }
+    }
+    //Update NavBar Cart
+  document.querySelector(".cart-quantity").innerHTML = totalQuantity;
+  })
+}

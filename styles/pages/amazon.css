@@ -154,3 +154,14 @@
   padding: 8px;
   border-radius: 50px;
 }
+
+.cart-added {
+  color: green;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  width: fit-content;
+}
+
