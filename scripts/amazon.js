@@ -1,6 +1,9 @@
+import {products} from '../data/products.js';
+
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
-//localStorage.clear();
+localStorage.clear();
 let html = "";
+
 products.forEach(function(element) {
     html += `
     <div class="product-container">
@@ -71,10 +74,9 @@ function addToCart(id, button){
   products.forEach(function(element){
     if(element.id === id){
       cart.forEach(function(item){
-        console.log("item.id ="+item.id+"currentCartId ="+currentCartId);
-        if(item.id === currentCartId){
-          console.log("Doublant");
-          item.quantity++;
+        //Check if product exist in cart, if yes Update Quantity
+        if(item.name === element.name && item.priceCents === element.priceCents){
+          item.quantity = item.quantity + quantity;
           found = true;
         }
       });
@@ -87,22 +89,25 @@ function addToCart(id, button){
         priceCents : element.priceCents,
         quantity : quantity
         });
-      //Save to localStorage
-      localStorage.setItem("currentCartId",currentCartId);
-      //Save to localStorage
-      localStorage.setItem("cart", JSON.stringify(cart));
-      //Show Added To Cart Message
-      button.parentElement.querySelector(".cart-added").innerHTML = 'Added To Cart!';
-      //Hide Message after 3 seconds
-      setTimeout(function(){
-        button.parentElement.querySelector(".cart-added").innerHTML = '';
-      },3000);
-      totalQuantity+= quantity;
-      //Save to localStorage
-      localStorage.setItem("totalQuantity",totalQuantity);
       }
+            //Save to localStorage
+            localStorage.setItem("currentCartId",currentCartId);
+            //Save to localStorage
+            localStorage.setItem("cart", JSON.stringify(cart));
+            //Show Added To Cart Message
+            button.parentElement.querySelector(".cart-added").innerHTML = 'Added To Cart!';
+            //Hide Message after 3 seconds
+            setTimeout(function(){
+              button.parentElement.querySelector(".cart-added").innerHTML = '';
+            },3000);
+            totalQuantity+= quantity;
+            //Save to localStorage
+            localStorage.setItem("totalQuantity",totalQuantity);
     }
     //Update NavBar Cart
   document.querySelector(".cart-quantity").innerHTML = totalQuantity;
   })
 }
+
+// Expose to global scope so `onclick="addToCart(...)"` works
+window.addToCart = addToCart;
