@@ -1,9 +1,8 @@
 import {products} from '../data/products.js';
-
+import { formatCurrency } from '../utils/money.js';
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
-localStorage.clear();
+//localStorage.clear();
 let html = "";
-
 products.forEach(function(element) {
     html += `
     <div class="product-container">
@@ -25,7 +24,7 @@ products.forEach(function(element) {
           </div>
 
           <div class="product-price">
-            $${(element.priceCents / 100).toFixed(2)}
+            $${formatCurrency(element.priceCents)}
           </div>
 
           <div class="product-quantity-container">
@@ -59,11 +58,12 @@ products.forEach(function(element) {
     document.querySelector(".products-grid").innerHTML = html;
 });
 
-let currentCartId = parseInt(localStorage.getItem("currentCartId")) || 0;
 let totalQuantity = parseInt(localStorage.getItem("totalQuantity")) || 0;
+
 //Update NavBar Cart
 document.querySelector(".cart-quantity").innerHTML = totalQuantity;
-function addToCart(id, button){
+
+function addToCart(productId, button){
   /**
    * parentElement : <div class="product-container">
    * Get Value from <select>
@@ -71,42 +71,39 @@ function addToCart(id, button){
    */
   const quantity = parseInt(button.parentElement.querySelector('select').value);
   let found = false;
-  products.forEach(function(element){
-    if(element.id === id){
-      cart.forEach(function(item){
-        //Check if product exist in cart, if yes Update Quantity
-        if(item.name === element.name && item.priceCents === element.priceCents){
-          item.quantity = item.quantity + quantity;
-          found = true;
-        }
-      });
-      if(found === false){
-      //Create New Cart Object and Load Product in it
-      cart.push({
-        id : ++currentCartId,
-        image : element.image,
-        name : element.name,
-        priceCents : element.priceCents,
-        quantity : quantity
-        });
-      }
-            //Save to localStorage
-            localStorage.setItem("currentCartId",currentCartId);
-            //Save to localStorage
-            localStorage.setItem("cart", JSON.stringify(cart));
-            //Show Added To Cart Message
-            button.parentElement.querySelector(".cart-added").innerHTML = 'Added To Cart!';
-            //Hide Message after 3 seconds
-            setTimeout(function(){
-              button.parentElement.querySelector(".cart-added").innerHTML = '';
-            },3000);
-            totalQuantity+= quantity;
-            //Save to localStorage
-            localStorage.setItem("totalQuantity",totalQuantity);
-    }
-    //Update NavBar Cart
-  document.querySelector(".cart-quantity").innerHTML = totalQuantity;
+  
+  cart.forEach(function(item){
+    //Check if product in Cart List
+    if(item.id === productId){
+      //if yes, update quantity
+      item.quantity = item.quantity + quantity;
+      found = true;
+    };
   })
+  //if no, Create new cart
+  if(found === false){
+    cart.push ({
+      id : productId,
+      quantity : quantity
+    });
+  }
+
+  console.log(cart);
+  //Save Cart in LocalStorage
+  localStorage.setItem("cart",JSON.stringify(cart));
+  //Show Added To Cart Message
+  button.parentElement.querySelector(".cart-added").innerHTML = 'Added To Cart!';
+  //Hide Message after 3 seconds
+  setTimeout(function(){
+    button.parentElement.querySelector(".cart-added").innerHTML = '';
+  },3000);
+  //Update Nav Bar Total Quantity
+  totalQuantity+= quantity;
+  //Save totalQuantity in localStorage
+  localStorage.setItem("totalQuantity",totalQuantity);
+  //Display New TotalQuantity Nav Bar
+  document.querySelector(".cart-quantity").innerHTML = totalQuantity;
+
 }
 
 // Expose to global scope so `onclick="addToCart(...)"` works
