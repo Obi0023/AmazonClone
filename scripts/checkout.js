@@ -47,7 +47,7 @@ products.forEach(function(product){
                       <div class="delivery-option">
                         <input type="radio" checked
                           class="delivery-option-input"
-                          name="delivery-option-1">
+                          name="${product.id}">
                         <div>
                           <div class="delivery-option-date">
                             Tuesday, June 21
@@ -60,7 +60,7 @@ products.forEach(function(product){
                       <div class="delivery-option">
                         <input type="radio"
                           class="delivery-option-input"
-                          name="delivery-option-1">
+                          name="${product.id}">
                         <div>
                           <div class="delivery-option-date">
                             Wednesday, June 15
@@ -73,7 +73,7 @@ products.forEach(function(product){
                       <div class="delivery-option">
                         <input type="radio"
                           class="delivery-option-input"
-                          name="delivery-option-1">
+                          name="${product.id}">
                         <div>
                           <div class="delivery-option-date">
                             Monday, June 13
