@@ -3,7 +3,9 @@ import { formatCurrency } from "../utils/money.js";
 //localStorage.clear();
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
 let totalQuantity = parseInt(localStorage.getItem("totalQuantity")) || 0;
+const now = dayjs();
 
+console.log(now);
 
 function loadAllCarts(){
   //Reset HTML each time we load the page for CRUDs to work
