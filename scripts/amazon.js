@@ -1,6 +1,8 @@
 import {products} from '../data/products.js';
 import { formatCurrency } from '../utils/money.js';
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
+let totalQuantity = parseInt(localStorage.getItem("totalQuantity")) || 0;
+
 //localStorage.clear();
 let html = "";
 products.forEach(function(element) {
@@ -57,8 +59,6 @@ products.forEach(function(element) {
 `;
     document.querySelector(".products-grid").innerHTML = html;
 });
-
-let totalQuantity = parseInt(localStorage.getItem("totalQuantity")) || 0;
 
 //Update NavBar Cart
 document.querySelector(".cart-quantity").innerHTML = totalQuantity;

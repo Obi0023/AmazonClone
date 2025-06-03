@@ -1,10 +1,14 @@
 import { products } from "../data/products.js";
 import { formatCurrency } from "../utils/money.js";
-
+//localStorage.clear();
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
-let html = "";
+let totalQuantity = parseInt(localStorage.getItem("totalQuantity")) || 0;
 
-//Load All Products
+
+function loadAllCarts(){
+  //Reset HTML each time we load the page for CRUDs to work
+  let html = "";
+  //Load All Products
 products.forEach(function(product){
   //Load All Carts
   cart.forEach(function(item){
@@ -34,7 +38,8 @@ products.forEach(function(product){
                         <span class="update-quantity-link link-primary">
                           Update
                         </span>
-                        <span class="delete-quantity-link link-primary">
+                        <span onclick="deleteCart('${product.id}')"
+                        class="delete-quantity-link link-primary">
                           Delete
                         </span>
                       </div>
@@ -88,8 +93,36 @@ products.forEach(function(product){
       </div>
       `;
     }
-    
-    document.querySelector(".order-summary").innerHTML = html;
 })
 });
+document.querySelector(".order-summary").innerHTML = html;
+}
+
+loadAllCarts();
+
+function deleteCart(cartId){
+  // Not Working Correctly
+  // cart.forEach(function(element, index) {
+  //   if(cartId === element.id){
+  //     totalQuantity = totalQuantity - element.quantity;
+  //     cart.splice(index,1);
+  //     localStorage.setItem("cart",JSON.stringify(cart));
+  //     localStorage.setItem("totalQuantity",totalQuantity);
+  //     loadAllCarts();
+  //   }
+  // });
+
+  //find Index of an element where element.id === cartId
+  let index = cart.findIndex(element => element.id === cartId);
+
+  totalQuantity = totalQuantity - cart[index].quantity;
+  cart.splice(index,1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  localStorage.setItem("totalQuantity",totalQuantity);
+  loadAllCarts();
+}
+
+
+
+window.deleteCart = deleteCart;
 
